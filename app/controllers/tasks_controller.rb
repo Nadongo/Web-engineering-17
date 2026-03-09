@@ -3,10 +3,13 @@ class TasksController < ApplicationController
 
   # GET /tasks
   def index
-    # Initialize the Ransack search object
+    # 1. Intercept the end date and stretch it to the end of the day (23:59:59)
+    if params[:q] && params[:q][:deadline_lteq].present?
+      params[:q][:deadline_lteq] = params[:q][:deadline_lteq].to_date.end_of_day
+    end
+
+    # 2. Hand the adjusted parameters to Ransack
     @q = Task.ransack(params[:q])
-    
-    # Retrieve the filtered results
     @tasks = @q.result
   end
 
