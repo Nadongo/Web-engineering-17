@@ -3,9 +3,14 @@ class Task < ApplicationRecord
   validates :title, presence: true
   validates :status, presence: true
   validates :deadline, presence: true
-  # validate :deadline, :must_start_from_today
 
-  # def must_start_from_today
-  #   errors.add(:deadline, 'must start from today.') if deadline.present? && deadline < Date.current
-  # end
+  # 1. Allowlist the searchable columns
+  def self.ransackable_attributes(auth_object = nil)
+    ["created_at", "deadline", "description", "id", "status", "title", "updated_at"]
+  end
+
+  # 2. Add this to allowlist associations (empty because we have none to search)
+  def self.ransackable_associations(auth_object = nil)
+    []
+  end
 end

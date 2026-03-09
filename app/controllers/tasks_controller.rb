@@ -3,7 +3,11 @@ class TasksController < ApplicationController
 
   # GET /tasks
   def index
-    @tasks = Task.all
+    # Initialize the Ransack search object
+    @q = Task.ransack(params[:q])
+    
+    # Retrieve the filtered results
+    @tasks = @q.result
   end
 
   # GET /tasks/1
